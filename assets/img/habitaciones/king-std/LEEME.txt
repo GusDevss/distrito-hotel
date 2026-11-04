@@ -1,0 +1,3 @@
+Coloca aqui las fotos de esta habitacion con nombres 1.webp, 2.webp, 3.webp ... (tambien sirve .jpg).
+El sitio las detecta solo y las muestra en la galeria de la pagina de la habitacion.
+Recomendado: 1600 px de ancho, formato WebP, menos de 300 KB cada una.
