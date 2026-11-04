@@ -82,10 +82,12 @@
   /* ---------- Loader + entrada ---------- */
   var hotel = $('#heroHotel');
   function splitChars(el) {
-    var text = el.textContent; el.textContent = '';
-    text.split('').forEach(function (ch) {
-      var s = document.createElement('span'); s.className = 'char';
-      s.textContent = ch === ' ' ? ' ' : ch; el.appendChild(s);
+    var words = el.textContent.split(' '); el.textContent = '';
+    words.forEach(function (wd, wi) {
+      var w = document.createElement('span'); w.className = 'word';
+      wd.split('').forEach(function (ch) { var s = document.createElement('span'); s.className = 'char'; s.textContent = ch; w.appendChild(s); });
+      el.appendChild(w);
+      if (wi < words.length - 1) el.appendChild(document.createTextNode(' '));
     });
   }
   $$('.hero__title .line > span').forEach(splitChars);
@@ -236,7 +238,7 @@
     { id: 'odonnell', name: "Parque Industrial O'Donnell Aeropuerto", dist: '6.5 km · 10 min', ll: [20.6185, -100.2470], radius: 650, img: null },
     { id: 'vynmsa', name: 'Parque Industrial VYNMSA Querétaro', dist: '6 km · 10 min', ll: [20.5885, -100.2245], radius: 550, img: null }
   ];
-  var FACTORY = '<svg viewBox="0 0 24 24"><path d="M3 21V10l5 3V10l5 3V7l8 4v10H3zm4-3h2v-2H7v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2z"/></svg>';
+  var FACTORY = '<svg viewBox="0 0 24 24" width="30" height="30"><path d="M3 21V10l5 3V10l5 3V7l8 4v10H3zm4-3h2v-2H7v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2z"/></svg>';
 
   var list = $('#places');
   PLACES.forEach(function (p) {
