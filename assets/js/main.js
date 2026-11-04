@@ -228,7 +228,7 @@
         if (hasGsap) gsap.fromTo(visibleItems(), { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: .05, duration: .6, ease: 'power3.out' });
       });
     });
-    var openG = lightbox(function () { return visibleItems().map(function (it) { return $('img', it); }); });
+    var openG = lightbox(function () { return visibleItems().map(function (it) { var im = $('img', it); return { src: im.dataset.full || im.src, alt: im.alt }; }); });
     items.forEach(function (it) { $('.g-open', it).addEventListener('click', function () { openG(visibleItems().indexOf(it)); }); });
   }
 
@@ -245,7 +245,8 @@
     thumbs.addEventListener('click', function (e) { var b = e.target.closest('.rg__thumb'); if (b) select(b); });
     var addThumb = function (src) {
       var b = document.createElement('button'); b.className = 'rg__thumb'; b.dataset.src = src;
-      b.innerHTML = '<img src="' + src + '" alt="" width="120" height="80" loading="lazy">';
+      var small = /\/\d+\.webp$/.test(src) ? src.replace(/\.webp$/, '-sm.webp') : src;
+      b.innerHTML = '<img src="' + small + '" alt="" width="120" height="80" loading="lazy" onerror="if(this.src!==\'' + src + '\')this.src=\'' + src + '\'">';
       thumbs.appendChild(b);
     };
     var probe = function (n, exts) {

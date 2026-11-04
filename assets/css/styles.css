@@ -454,3 +454,14 @@ svg{max-width:100%}
 @media (max-width:560px){.rooms__grid--3,.room-page__feats{grid-template-columns:1fr}.room-card__btns{flex-direction:column}}
 .room-card__btns{flex-direction:column}
 .room-card__btns .btn{flex:none;width:100%;white-space:nowrap}
+
+/* ===== v4: fotos reales ===== */
+.ev-art__photo{position:absolute!important;inset:0;width:100%;height:100%;object-fit:cover;z-index:0!important;filter:saturate(.9) brightness(.75)}
+.ev-art::before{z-index:0;mix-blend-mode:multiply;opacity:.92}
+.ev-art::after{z-index:0}
+.ev-art__ico,.ev-art__day,.ev-art em{z-index:2!important}
+.venue__strip{position:absolute;left:24px;right:24px;bottom:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;z-index:2}
+.venue__strip img{position:static;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:10px;border:2px solid rgba(255,255,255,.85);box-shadow:0 10px 25px rgba(0,0,0,.35)}
+.venue:hover .venue__strip img{transform:none}
+.g-item.wide{grid-column:span 2}
+@media (max-width:560px){.g-item.wide{grid-column:span 2}.venue__strip{display:none}}
