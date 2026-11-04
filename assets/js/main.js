@@ -1,33 +1,33 @@
-/* Distrito Hotel — interacciones */
+/* Distrito Hotel — interacciones (todas las páginas) */
 (function () {
   'use strict';
   var IMG = 'https://lavenderblush-bison-390947.hostingersite.com/wp-content/uploads/';
-  var WA = '524426737901';
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var hasGsap = typeof window.gsap !== 'undefined';
   if (!hasGsap) document.documentElement.classList.add('no-gsap');
   else gsap.registerPlugin(ScrollTrigger);
 
-  document.getElementById('year').textContent = new Date().getFullYear();
+  var yearEl = $('#year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* ---------- Header sticky + menú móvil ---------- */
-  var header = document.getElementById('header');
-  var toTop = document.getElementById('toTop');
-  var ring = document.getElementById('toTopRing');
-  var lastY = 0;
+  /* ---------- Header sticky + botón arriba ---------- */
+  var header = $('#header'), toTop = $('#toTop'), ring = $('#toTopRing');
   function onScroll() {
     var y = window.scrollY;
     header.classList.toggle('is-scrolled', y > 40);
-    toTop.classList.toggle('is-visible', y > 600);
-    var max = document.documentElement.scrollHeight - innerHeight;
-    ring.style.strokeDashoffset = 302 - (302 * (max > 0 ? y / max : 0));
-    lastY = y;
+    if (toTop) {
+      toTop.classList.toggle('is-visible', y > 600);
+      var max = document.documentElement.scrollHeight - innerHeight;
+      ring.style.strokeDashoffset = 302 - (302 * (max > 0 ? y / max : 0));
+    }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+  if (toTop) toTop.addEventListener('click', function (e) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-  var burger = document.getElementById('burger');
-  var nav = document.querySelector('.nav');
+  /* ---------- Menú móvil ---------- */
+  var burger = $('#burger'), nav = $('.nav');
   burger.addEventListener('click', function () {
     var open = burger.getAttribute('aria-expanded') !== 'true';
     burger.setAttribute('aria-expanded', open);
@@ -37,115 +37,196 @@
     if (e.target.tagName === 'A') { burger.setAttribute('aria-expanded', 'false'); nav.classList.remove('is-open'); }
   });
 
-  /* ---------- Loader + Hero (aparece una sola vez y se queda fijo) ---------- */
+  /* ---------- Cielo estrellado (canvas) ---------- */
+  $$('[data-stars]').forEach(function (cv) {
+    var ctx = cv.getContext('2d'), stars = [], shooting = null, w, h, dpr = Math.min(window.devicePixelRatio || 1, 2), visible = true;
+    function size() {
+      var r = cv.parentElement.getBoundingClientRect();
+      w = r.width; h = r.height;
+      cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.round(w * h / 2600);
+      stars = [];
+      for (var i = 0; i < n; i++) {
+        stars.push({ x: Math.random() * w, y: Math.random() * h * .85, r: Math.random() * 1.3 + .2, a: Math.random(), s: Math.random() * .02 + .004, gold: Math.random() < .12 });
+      }
+    }
+    function draw() {
+      if (!visible) { requestAnimationFrame(draw); return; }
+      ctx.clearRect(0, 0, w, h);
+      for (var i = 0; i < stars.length; i++) {
+        var st = stars[i];
+        st.a += st.s; var o = .35 + Math.abs(Math.sin(st.a)) * .65;
+        ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, 6.283);
+        ctx.fillStyle = st.gold ? 'rgba(232,200,160,' + o + ')' : 'rgba(255,255,255,' + o + ')';
+        ctx.fill();
+        if (st.r > 1.25) { ctx.fillStyle = 'rgba(255,255,255,' + o * .12 + ')'; ctx.beginPath(); ctx.arc(st.x, st.y, st.r * 4, 0, 6.283); ctx.fill(); }
+      }
+      // estrella fugaz ocasional
+      if (!reduce && !shooting && Math.random() < .004) shooting = { x: Math.random() * w * .7 + w * .2, y: Math.random() * h * .3, l: 0, v: 9 + Math.random() * 5 };
+      if (shooting) {
+        var sh = shooting, tx = sh.x - sh.l, ty = sh.y + sh.l * .45;
+        var g = ctx.createLinearGradient(sh.x, sh.y, tx, ty);
+        g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(255,240,215,.9)');
+        ctx.strokeStyle = g; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(sh.x, sh.y); ctx.lineTo(tx, ty); ctx.stroke();
+        sh.l += sh.v; if (sh.l > 260) shooting = null;
+      }
+      requestAnimationFrame(draw);
+    }
+    size();
+    window.addEventListener('resize', size);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }).observe(cv);
+    if (reduce) { stars.forEach(function (s) { s.s = 0; }); }
+    requestAnimationFrame(draw);
+  });
+
+  /* ---------- Loader + entrada ---------- */
+  var loader = $('.loader');
+  var hotel = $('#heroHotel');
   function splitChars(el) {
     var text = el.textContent; el.textContent = '';
     text.split('').forEach(function (ch) {
-      var s = document.createElement('span');
-      s.className = 'char';
-      s.textContent = ch === ' ' ? ' ' : ch;
-      el.appendChild(s);
+      var s = document.createElement('span'); s.className = 'char';
+      s.textContent = ch === ' ' ? ' ' : ch; el.appendChild(s);
     });
   }
-  document.querySelectorAll('.hero__title .line > span').forEach(splitChars);
+  $$('.hero__title .line > span').forEach(splitChars);
 
-  var loader = document.querySelector('.loader');
-  var hotel = document.getElementById('heroHotel');
-
-  function startHero() {
-    if (!hasGsap || reduce) { loader.remove(); return; }
+  var started = false;
+  function start() {
+    if (started) return; started = true;
+    if (!hasGsap || reduce) { loader && loader.remove(); return; }
     var tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
-    tl.to(loader, { autoAlpha: 0, duration: .6, onComplete: function () { loader.remove(); } })
-      .from('.hero__title .char', { yPercent: 110, rotate: 18, opacity: 0, duration: 1, stagger: .025 }, '-=.2')
-      .fromTo(hotel,
-        { y: 220, opacity: 0, rotationX: 28, scale: .88, filter: 'brightness(0) blur(6px)' },
-        { y: 0, opacity: 1, rotationX: 0, scale: 1, filter: 'brightness(1) blur(0px)', duration: 2.2, ease: 'expo.out' }, '-=.6')
-      .to('.hero__glow', { opacity: 1, duration: 1.6 }, '-=1.4')
-      .from('.hero__scroll', { opacity: 0, y: 20, duration: .8 }, '-=1');
-
-    // Parallax al hacer scroll (el hotel permanece visible y fijo en su lugar)
-    gsap.to('.hero__title', { yPercent: -60, opacity: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('.hero__stage', { y: 80, scale: 1.06, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-
-    // Efecto 3D con el mouse
-    var stage = document.getElementById('heroStage');
-    var qx = gsap.quickTo(stage, 'rotationY', { duration: 1.2, ease: 'power3' });
-    var qy = gsap.quickTo(stage, 'rotationX', { duration: 1.2, ease: 'power3' });
-    document.querySelector('.hero').addEventListener('mousemove', function (e) {
-      qx((e.clientX / innerWidth - .5) * 6);
-      qy((e.clientY / innerHeight - .5) * -3);
-    });
+    tl.to(loader, { autoAlpha: 0, duration: .6, onComplete: function () { loader.remove(); } });
+    if (hotel) {
+      tl.from('.hero__title .char', { yPercent: 110, rotate: 18, opacity: 0, duration: 1, stagger: .025 }, '-=.2')
+        .fromTo(hotel,
+          { y: 220, opacity: 0, scale: .9, filter: 'brightness(0)' },
+          { y: 0, opacity: 1, scale: 1, filter: 'brightness(1)', duration: 2.2, ease: 'expo.out', clearProps: 'filter' }, '-=.6')
+        .to('.hero__glow', { opacity: 1, duration: 1.6 }, '-=1.4')
+        .from('.hero__scroll', { opacity: 0, y: 20, duration: .8 }, '-=1');
+      gsap.to('.hero__title', { yPercent: -50, opacity: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    }
+    if ($('.page-hero')) {
+      tl.from('.page-hero__title, .page-hero__sub, .crumbs', { y: 50, opacity: 0, duration: 1.1, stagger: .12 }, '-=.2')
+        .from('.page-hero__bg', { scale: 1.15, duration: 2.4, ease: 'expo.out' }, '<');
+    }
   }
-  if (hotel.complete) setTimeout(startHero, 250);
-  else { hotel.addEventListener('load', startHero, { once: true }); setTimeout(function () { if (document.body.contains(loader)) startHero(); }, 3500); }
+  if (hotel && !hotel.complete) { hotel.addEventListener('load', start, { once: true }); setTimeout(start, 3500); }
+  else setTimeout(start, 200);
 
-  /* ---------- Reveals al hacer scroll ---------- */
+  /* ---------- Reveals (solo desplazamiento + opacidad; sin rotaciones) ---------- */
   if (hasGsap && !reduce) {
-    gsap.utils.toArray('.reveal').forEach(function (el) {
-      gsap.from(el, { y: 60, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
+    $$('.reveal').forEach(function (el) {
+      gsap.from(el, { y: 50, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
     });
-    gsap.utils.toArray('.reveal-3d').forEach(function (el) {
-      gsap.from(el, { rotationX: 18, rotationY: -12, y: 100, opacity: 0, transformPerspective: 1200, duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 85%' } });
-    });
-    gsap.from('.marquee', { opacity: 0, y: 40, duration: 1, scrollTrigger: { trigger: '.marquee', start: 'top 90%' } });
+    ScrollTrigger.batch('.room-card', { start: 'top 90%', once: true, onEnter: function (b) { gsap.fromTo(b, { y: 60, opacity: 0 }, { y: 0, opacity: 1, stagger: .12, duration: 1, ease: 'power3.out', overwrite: true }); } });
   }
-
-  /* ---------- Tilt 3D en imagen del video ---------- */
-  document.querySelectorAll('[data-tilt]').forEach(function (el) {
-    if (reduce) return;
-    el.addEventListener('mousemove', function (e) {
-      var r = el.getBoundingClientRect();
-      var x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
-      el.style.transform = 'rotateY(' + x * 10 + 'deg) rotateX(' + -y * 10 + 'deg)';
-    });
-    el.addEventListener('mouseleave', function () { el.style.transform = ''; });
-  });
 
   /* ---------- Video popup ---------- */
-  var modal = document.getElementById('videoModal');
-  var holder = document.getElementById('videoHolder');
-  var playBtn = document.getElementById('playBtn');
-  function openVideo() {
-    holder.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/ger_L_7KDts?autoplay=1&rel=0" title="Video Distrito Hotel" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
-    modal.hidden = false; document.body.style.overflow = 'hidden';
-    modal.querySelector('.modal__close').focus();
+  var modal = $('#videoModal'), playBtn = $('#playBtn');
+  if (modal && playBtn) {
+    var holder = $('#videoHolder');
+    var openVideo = function () {
+      holder.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/ger_L_7KDts?autoplay=1&rel=0" title="Video Distrito Hotel" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      modal.hidden = false; document.body.style.overflow = 'hidden'; $('.modal__close', modal).focus();
+    };
+    var closeVideo = function () { modal.hidden = true; holder.innerHTML = ''; document.body.style.overflow = ''; playBtn.focus(); };
+    playBtn.addEventListener('click', openVideo);
+    modal.addEventListener('click', function (e) { if (e.target.hasAttribute('data-close')) closeVideo(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) closeVideo(); });
   }
-  function closeVideo() { modal.hidden = true; holder.innerHTML = ''; document.body.style.overflow = ''; playBtn.focus(); }
-  playBtn.addEventListener('click', openVideo);
-  modal.addEventListener('click', function (e) { if (e.target.hasAttribute('data-close')) closeVideo(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) closeVideo(); });
 
-  /* ---------- Carrusel de amenidades ---------- */
-  (function () {
-    var imgs = document.querySelectorAll('#amMedia img');
-    var slides = document.querySelectorAll('#amSlides .am');
-    var idxEl = document.getElementById('amIdx');
-    var bar = document.getElementById('amBar');
-    var i = 0, n = slides.length, timer, DUR = 6000;
-    function go(k) {
-      i = (k + n) % n;
-      imgs.forEach(function (im, j) { im.classList.toggle('is-active', j === i); });
-      slides.forEach(function (s, j) { s.classList.toggle('is-active', j === i); });
-      idxEl.textContent = ('0' + (i + 1)).slice(-2);
-      restart();
+  /* ---------- Carrusel genérico con autoplay ---------- */
+  function carousel(opts) {
+    var i = 0, n = opts.count, timer;
+    function go(k, user) {
+      var prev = i; i = (k + n) % n;
+      opts.render(i, prev);
+      if (user !== false) restart();
     }
-    function restart() {
-      clearTimeout(timer);
-      bar.style.transition = 'none'; bar.style.width = '0';
-      void bar.offsetWidth;
-      bar.style.transition = 'width ' + DUR + 'ms linear'; bar.style.width = '100%';
-      timer = setTimeout(function () { go(i + 1); }, DUR);
-    }
-    document.getElementById('amPrev').addEventListener('click', function () { go(i - 1); });
-    document.getElementById('amNext').addEventListener('click', function () { go(i + 1); });
-    // swipe en móvil
-    var sx = 0, sec = document.getElementById('amenidades');
-    sec.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
-    sec.addEventListener('touchend', function (e) { var d = e.changedTouches[0].clientX - sx; if (Math.abs(d) > 50) go(i + (d < 0 ? 1 : -1)); });
+    function restart() { clearTimeout(timer); opts.progress && opts.progress(); timer = setTimeout(function () { go(i + 1); }, opts.dur); }
     restart();
-  })();
+    return { go: go, next: function () { go(i + 1); }, prev: function () { go(i - 1); }, get i() { return i; } };
+  }
+  function swipe(el, c) {
+    var sx = 0;
+    el.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
+    el.addEventListener('touchend', function (e) { var d = e.changedTouches[0].clientX - sx; if (Math.abs(d) > 50) (d < 0 ? c.next : c.prev)(); });
+  }
+
+  /* Amenidades: la imagen anterior se queda debajo hasta que la nueva termina de entrar (sin saltos) */
+  var amMedia = $('#amMedia');
+  if (amMedia) {
+    var imgs = $$('img', amMedia), slides = $$('#amSlides .am'), idxEl = $('#amIdx'), bar = $('#amBar'), DUR = 6000;
+    var am = carousel({
+      count: slides.length, dur: DUR,
+      render: function (i, prev) {
+        imgs.forEach(function (im, j) { im.classList.remove('is-prev'); im.classList.toggle('is-active', j === i); });
+        if (prev !== i) imgs[prev].classList.add('is-prev');
+        slides.forEach(function (s, j) { s.classList.toggle('is-active', j === i); });
+        idxEl.textContent = ('0' + (i + 1)).slice(-2);
+      },
+      progress: function () { bar.style.transition = 'none'; bar.style.width = '0'; void bar.offsetWidth; bar.style.transition = 'width ' + DUR + 'ms linear'; bar.style.width = '100%'; }
+    });
+    $('#amPrev').addEventListener('click', am.prev);
+    $('#amNext').addEventListener('click', am.next);
+    swipe($('#amenidades'), am);
+  }
+
+  /* Eventos */
+  var evStage = $('#events');
+  if (evStage) {
+    var evs = $$('.ev', evStage), tabs = $$('.ev-tab');
+    var ev = carousel({
+      count: evs.length, dur: 7000,
+      render: function (i) {
+        evs.forEach(function (e, j) { e.classList.toggle('is-active', j === i); });
+        tabs.forEach(function (t, j) { t.classList.toggle('is-active', j === i); t.setAttribute('aria-selected', j === i); });
+      },
+      progress: function () { tabs.forEach(function (t) { t.classList.remove('is-running'); }); void evStage.offsetWidth; var a = $('.ev-tab.is-active'); a && a.classList.add('is-running'); }
+    });
+    tabs.forEach(function (t) { t.addEventListener('click', function () { ev.go(+t.dataset.i); }); });
+    $('[data-ev="prev"]').addEventListener('click', ev.prev);
+    $('[data-ev="next"]').addEventListener('click', ev.next);
+    swipe(evStage, ev);
+  }
+
+  /* ---------- Galería: filtros + lightbox ---------- */
+  var grid = $('#gGrid');
+  if (grid) {
+    var items = $$('.g-item', grid);
+    $$('.g-filter').forEach(function (b) {
+      b.addEventListener('click', function () {
+        $$('.g-filter').forEach(function (x) { x.classList.toggle('is-active', x === b); });
+        var f = b.dataset.filter;
+        items.forEach(function (it) { it.classList.toggle('is-hidden', f !== 'all' && it.dataset.cat !== f); });
+        if (hasGsap) gsap.fromTo(items.filter(function (it) { return !it.classList.contains('is-hidden'); }), { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: .05, duration: .6, ease: 'power3.out' });
+      });
+    });
+    var lb = $('#lightbox'), lbImg = $('#lbImg'), lbCap = $('#lbCap'), cur = 0;
+    var visibleItems = function () { return items.filter(function (it) { return !it.classList.contains('is-hidden'); }); };
+    var show = function (k) {
+      var v = visibleItems(); cur = (k + v.length) % v.length;
+      var im = $('img', v[cur]); lbImg.src = im.src; lbImg.alt = im.alt; lbCap.textContent = im.alt;
+    };
+    items.forEach(function (it) {
+      $('.g-open', it).addEventListener('click', function () { show(visibleItems().indexOf(it)); lb.hidden = false; document.body.style.overflow = 'hidden'; });
+    });
+    var closeLb = function () { lb.hidden = true; document.body.style.overflow = ''; };
+    lb.addEventListener('click', function (e) {
+      var a = e.target.closest('[data-lb]');
+      if (a) { if (a.dataset.lb === 'close') closeLb(); else show(cur + (a.dataset.lb === 'next' ? 1 : -1)); }
+      else if (e.target === lb) closeLb();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') closeLb(); if (e.key === 'ArrowRight') show(cur + 1); if (e.key === 'ArrowLeft') show(cur - 1);
+    });
+  }
 
   /* ---------- Mapa interactivo ---------- */
+  var mapEl = $('#map');
+  if (!mapEl) return;
   // Coordenadas editables: [lat, lng]. radius = metros del área iluminada.
   var HOTEL = { id: 'hotel', name: 'Distrito Hotel', dist: 'Tu punto de partida', ll: [20.6268, -100.1880], img: IMG + '2026/09/distrito-hotel-aeropuerto-noche.webp', radius: 160 };
   var PLACES = [
@@ -159,79 +240,62 @@
     { id: 'odonnell', name: "Parque Industrial O'Donnell Aeropuerto", dist: '6.5 km · 10 min', ll: [20.6185, -100.2470], radius: 650, img: null },
     { id: 'vynmsa', name: 'Parque Industrial VYNMSA Querétaro', dist: '6 km · 10 min', ll: [20.5885, -100.2245], radius: 550, img: null }
   ];
+  var FACTORY = '<svg viewBox="0 0 24 24"><path d="M3 21V10l5 3V10l5 3V7l8 4v10H3zm4-3h2v-2H7v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2z"/></svg>';
 
-  var list = document.getElementById('places');
+  var list = $('#places');
   PLACES.forEach(function (p) {
     var li = document.createElement('li');
     li.className = 'place' + (p.id === 'hotel' ? ' is-active' : '');
     li.dataset.id = p.id; li.tabIndex = 0;
-    li.innerHTML = '<div><h3><span class="place__dot"></span>' + p.name + '</h3><small>' + p.dist + '</small></div>' + (p.img ? '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" width="104" height="70">' : '<span class="place__ico" aria-hidden="true">' + (p.id === 'parking' ? 'P' : '<svg viewBox="0 0 24 24"><path d="M3 21V10l5 3V10l5 3V7l8 4v10H3zm4-3h2v-2H7v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2z"/></svg>') + '</span>');
+    li.innerHTML = '<div><h3><span class="place__dot"></span>' + p.name + '</h3><small>' + p.dist + '</small></div>' +
+      (p.img ? '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy" width="104" height="70">'
+             : '<span class="place__ico" aria-hidden="true">' + (p.id === 'parking' ? 'P' : FACTORY) + '</span>');
     list.appendChild(li);
   });
 
   function initMap() {
     if (typeof L === 'undefined') return;
-    var map = L.map('map', { center: [20.6264, -100.1953], zoom: 14, scrollWheelZoom: false, zoomControl: true, attributionControl: true });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19, subdomains: 'abcd',
-      attribution: '&copy; OpenStreetMap &copy; CARTO'
-    }).addTo(map);
-
-    var card = document.getElementById('mapCard');
-    var areaLayer = L.layerGroup().addTo(map);
-    var markers = {};
+    var map = L.map('map', { center: [20.6264, -100.1953], zoom: 14, scrollWheelZoom: false });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd', attribution: '&copy; OpenStreetMap &copy; CARTO' }).addTo(map);
+    var card = $('#mapCard'), areaLayer = L.layerGroup().addTo(map), current = null;
 
     PLACES.forEach(function (p) {
       var isHotel = p.id === 'hotel';
       var icon = L.divIcon({ className: '', html: '<div class="pin' + (isHotel ? ' pin--hotel' : '') + '" data-pin="' + p.id + '"><span class="pin__pulse"></span><span class="pin__core"></span></div>', iconSize: isHotel ? [30, 30] : [22, 22], iconAnchor: isHotel ? [15, 15] : [11, 11] });
-      var m = L.marker(p.ll, { icon: icon, keyboard: true, title: p.name, riseOnHover: true }).addTo(map);
+      var m = L.marker(p.ll, { icon: icon, title: p.name, riseOnHover: true }).addTo(map);
       m.bindTooltip(p.name, { className: 'pin-label', direction: 'top', offset: [0, -14], permanent: isHotel });
-      m.on('mouseover click focus', function () { highlight(p.id, false); });
-      markers[p.id] = m;
+      m.on('mouseover click', function () { highlight(p.id, false); });
     });
 
-    var current = null;
     function highlight(id, pan) {
-      if (current === id) return;
-      current = id;
+      if (current === id) return; current = id;
       var p = PLACES.filter(function (x) { return x.id === id; })[0];
       areaLayer.clearLayers();
-      // Área iluminada
       L.circle(p.ll, { radius: p.radius * 1.6, stroke: false, fillColor: '#C29F7B', fillOpacity: .08 }).addTo(areaLayer);
-      L.circle(p.ll, { radius: p.radius, color: '#C29F7B', weight: 2, fillColor: '#C29F7B', fillOpacity: .28, className: 'area' }).addTo(areaLayer);
-      // Ruta desde el hotel
+      L.circle(p.ll, { radius: p.radius, color: '#C29F7B', weight: 2, fillColor: '#C29F7B', fillOpacity: .28 }).addTo(areaLayer);
       if (id !== 'hotel') {
-        var a = HOTEL.ll, b = p.ll;
-        var mid = [(a[0] + b[0]) / 2 + (b[1] - a[1]) * .15, (a[1] + b[1]) / 2 - (b[0] - a[0]) * .15];
-        var pts = [];
-        for (var t = 0; t <= 1.0001; t += .05) {
-          pts.push([(1 - t) * (1 - t) * a[0] + 2 * (1 - t) * t * mid[0] + t * t * b[0], (1 - t) * (1 - t) * a[1] + 2 * (1 - t) * t * mid[1] + t * t * b[1]]);
-        }
+        var a = HOTEL.ll, b = p.ll, mid = [(a[0] + b[0]) / 2 + (b[1] - a[1]) * .15, (a[1] + b[1]) / 2 - (b[0] - a[0]) * .15], pts = [];
+        for (var t = 0; t <= 1.0001; t += .05) pts.push([(1 - t) * (1 - t) * a[0] + 2 * (1 - t) * t * mid[0] + t * t * b[0], (1 - t) * (1 - t) * a[1] + 2 * (1 - t) * t * mid[1] + t * t * b[1]]);
         L.polyline(pts, { color: '#ffd9a8', weight: 2.5, opacity: .95, className: 'route' }).addTo(areaLayer);
         L.circle(HOTEL.ll, { radius: 120, color: '#fff', weight: 1, fillOpacity: .15, fillColor: '#fff' }).addTo(areaLayer);
       }
-      document.querySelectorAll('.pin').forEach(function (el) { el.classList.toggle('is-active', el.dataset.pin === id); });
-      list.querySelectorAll('.place').forEach(function (el) { el.classList.toggle('is-active', el.dataset.id === id); });
-      card.querySelector('.map-card__tag').textContent = id === 'hotel' ? 'Distrito Hotel' : 'Desde Distrito Hotel';
-      card.querySelector('.map-card__title').textContent = p.name;
-      card.querySelector('.map-card__dist').textContent = p.dist;
+      $$('.pin').forEach(function (el) { el.classList.toggle('is-active', el.dataset.pin === id); });
+      $$('.place', list).forEach(function (el) { el.classList.toggle('is-active', el.dataset.id === id); });
+      $('.map-card__tag', card).textContent = id === 'hotel' ? 'Distrito Hotel' : 'Desde Distrito Hotel';
+      $('.map-card__title', card).textContent = p.name;
+      $('.map-card__dist', card).textContent = p.dist;
       if (hasGsap) gsap.fromTo(card, { y: 12, opacity: .4 }, { y: 0, opacity: 1, duration: .5, ease: 'power3.out' });
       if (pan) {
         if (id === 'hotel') map.flyTo(HOTEL.ll, 15, { duration: .8 });
         else map.flyToBounds(L.latLngBounds([HOTEL.ll, p.ll]).pad(.45), { duration: .8, maxZoom: 15 });
       }
     }
-
     list.addEventListener('mouseover', function (e) { var li = e.target.closest('.place'); if (li) highlight(li.dataset.id, true); });
     list.addEventListener('focusin', function (e) { var li = e.target.closest('.place'); if (li) highlight(li.dataset.id, true); });
     list.addEventListener('click', function (e) { var li = e.target.closest('.place'); if (li) { current = null; highlight(li.dataset.id, true); } });
-
     highlight('hotel', false);
     setTimeout(function () { map.invalidateSize(); }, 400);
   }
-
-  // Carga el mapa cuando la sección se acerca (rendimiento)
-  var mapEl = document.getElementById('map');
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { io.disconnect(); initMap(); } }, { rootMargin: '400px' });
     io.observe(mapEl);
