@@ -19,17 +19,18 @@
   <link rel="icon" href="https://lavenderblush-bison-390947.hostingersite.com/wp-content/uploads/2026/09/cropped-Distrito-Hotel-icon-32x32.png" sizes="32x32">
   <link rel="icon" href="https://lavenderblush-bison-390947.hostingersite.com/wp-content/uploads/2026/09/cropped-Distrito-Hotel-icon-192x192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="https://lavenderblush-bison-390947.hostingersite.com/wp-content/uploads/2026/09/cropped-Distrito-Hotel-icon-180x180.png">
+  <link rel="preconnect" href="https://lavenderblush-bison-390947.hostingersite.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="https://lavenderblush-bison-390947.hostingersite.com/wp-content/uploads/2026/10/Distrito-hotel-fachada-edificio-noche-sin-fondo.webp">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" media="print" onload="this.media='all'">
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Hotel", "name": "Distrito Hotel", "description": "Hotel moderno frente al Aeropuerto Internacional de Querétaro (AIQ), con habitaciones insonorizadas, traslado al aeropuerto gratis, restaurante, sport bar, gimnasio 24/7 y salas de juntas.", "url": "https://distritohotelaeropuerto.com/", "telephone": "+52 442 673 7901", "email": "reservaciones@distritohotelaeropuerto.com", "image": "https://lavenderblush-bison-390947.hostingersite.com/wp-content/uploads/2026/09/distrito-hotel-aeropuerto-noche.webp", "address": {"@type": "PostalAddress", "streetAddress": "Carretera Estatal 200, Carr. Querétaro-Tequisquiapan 22500", "addressLocality": "Santiago de Querétaro", "addressRegion": "Qro.", "postalCode": "76270", "addressCountry": "MX"}, "geo": {"@type": "GeoCoordinates", "latitude": 20.6264, "longitude": -100.1953}, "hasMap": "https://maps.app.goo.gl/h9yAftxNMz77YU9E6", "amenityFeature": [{"@type": "LocationFeatureSpecification", "name": "Traslado al aeropuerto gratis", "value": true}, {"@type": "LocationFeatureSpecification", "name": "WiFi alta velocidad", "value": true}, {"@type": "LocationFeatureSpecification", "name": "Gimnasio 24/7", "value": true}, {"@type": "LocationFeatureSpecification", "name": "Restaurante", "value": true}, {"@type": "LocationFeatureSpecification", "name": "Sport Bar", "value": true}, {"@type": "LocationFeatureSpecification", "name": "Salas de juntas", "value": true}, {"@type": "LocationFeatureSpecification", "name": "Estacionamiento", "value": true}], "sameAs": ["https://www.facebook.com/people/Hotel-Distrito/61589247180876/", "https://www.instagram.com/Distrito.hotel"]}</script>
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body class="page-inicio">
   <a class="skip" href="#contenido">Saltar al contenido</a>
-  <div class="loader" aria-hidden="true"><span class="loader__line"></span></div>
   <header class="header" id="header">
     <div class="header__inner">
       <a href="/" class="header__logo" aria-label="Distrito Hotel, inicio">
@@ -62,7 +63,7 @@
       </h1>
       <p class="sr-only">Distrito Hotel, hotel frente al Aeropuerto Internacional de Querétaro.</p>
       <div class="hero__stage" id="heroStage">
-        <img class="hero__hotel" id="heroHotel"
+        <img class="hero__hotel" decoding="async" id="heroHotel"
              src="https://lavenderblush-bison-390947.hostingersite.com/wp-content/uploads/2026/10/Distrito-hotel-fachada-edificio-noche-sin-fondo.webp"
              alt="Fachada nocturna de Distrito Hotel frente al Aeropuerto de Querétaro" width="2536" height="733" fetchpriority="high">
       </div>

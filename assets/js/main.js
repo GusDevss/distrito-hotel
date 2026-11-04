@@ -44,7 +44,7 @@
       var r = cv.parentElement.getBoundingClientRect();
       w = r.width; h = r.height;
       cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var n = Math.round(w * h / 2600);
+      var n = Math.min(520, Math.round(w * h / 2400));
       stars = [];
       for (var i = 0; i < n; i++) {
         stars.push({ x: Math.random() * w, y: Math.random() * h * .85, r: Math.random() * 1.3 + .2, a: Math.random(), s: Math.random() * .02 + .004, gold: Math.random() < .12 });
@@ -80,7 +80,6 @@
   });
 
   /* ---------- Loader + entrada ---------- */
-  var loader = $('.loader');
   var hotel = $('#heroHotel');
   function splitChars(el) {
     var text = el.textContent; el.textContent = '';
@@ -91,28 +90,25 @@
   }
   $$('.hero__title .line > span').forEach(splitChars);
 
-  var started = false;
-  function start() {
-    if (started) return; started = true;
-    if (!hasGsap || reduce) { loader && loader.remove(); return; }
-    var tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
-    tl.to(loader, { autoAlpha: 0, duration: .6, onComplete: function () { loader.remove(); } });
+  /* Entrada inmediata: sin pantalla de carga. El hotel entra en cuanto su imagen termina de cargar. */
+  if (hasGsap && !reduce) {
     if (hotel) {
-      tl.from('.hero__title .char', { yPercent: 110, rotate: 18, opacity: 0, duration: 1, stagger: .025 }, '-=.2')
-        .fromTo(hotel,
-          { y: 220, opacity: 0, scale: .9, filter: 'brightness(0)' },
-          { y: 0, opacity: 1, scale: 1, filter: 'brightness(1)', duration: 2.2, ease: 'expo.out', clearProps: 'filter' }, '-=.6')
-        .to('.hero__glow', { opacity: 1, duration: 1.6 }, '-=1.4')
-        .from('.hero__scroll', { opacity: 0, y: 20, duration: .8 }, '-=1');
+      gsap.from('.hero__title .char', { yPercent: 110, rotate: 18, opacity: 0, duration: 1, stagger: .025, ease: 'power4.out', delay: .1 });
+      gsap.set(hotel, { y: 160, opacity: 0, scale: .94 });
+      var showHotel = function () {
+        gsap.to(hotel, { y: 0, opacity: 1, scale: 1, duration: 2, ease: 'expo.out' });
+        gsap.to('.hero__glow', { opacity: 1, duration: 1.6, delay: .4 });
+      };
+      if (hotel.complete && hotel.naturalWidth) showHotel();
+      else { hotel.addEventListener('load', showHotel, { once: true }); hotel.addEventListener('error', showHotel, { once: true }); }
+      gsap.from('.hero__scroll', { opacity: 0, y: 20, duration: .8, delay: 1.2 });
       gsap.to('.hero__title', { yPercent: -50, opacity: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
     }
     if ($('.page-hero')) {
-      tl.from('.page-hero__title, .page-hero__sub, .crumbs', { y: 50, opacity: 0, duration: 1.1, stagger: .12 }, '-=.2')
-        .from('.page-hero__bg', { scale: 1.15, duration: 2.4, ease: 'expo.out' }, '<');
+      gsap.from('.page-hero__title, .page-hero__sub, .crumbs', { y: 50, opacity: 0, duration: 1.1, stagger: .12, ease: 'power4.out' });
+      gsap.from('.page-hero__bg', { scale: 1.12, duration: 2.4, ease: 'expo.out' });
     }
-  }
-  if (hotel && !hotel.complete) { hotel.addEventListener('load', start, { once: true }); setTimeout(start, 3500); }
-  else setTimeout(start, 200);
+  } else { var g = $('.hero__glow'); if (g) g.style.opacity = 1; }
 
   /* ---------- Reveals (solo desplazamiento + opacidad; sin rotaciones) ---------- */
   if (hasGsap && !reduce) {
