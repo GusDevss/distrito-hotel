@@ -486,3 +486,10 @@ svg{max-width:100%}
   .crumbs{margin-bottom:12px}
 }
 .footer__top img{width:240px;height:auto}
+
+/* ===== v6: fotos de eventos con crédito ===== */
+.ev-art--photo::before{opacity:.55}
+.ev-art--photo .ev-art__photo{filter:saturate(1) brightness(.8)}
+.ev-art--photo::after{display:none}
+.ev-credit{position:absolute!important;right:12px;bottom:10px;z-index:3!important;font-size:.68rem;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);padding:3px 8px;border-radius:6px;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-credit:hover{color:#fff}
