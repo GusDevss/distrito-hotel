@@ -501,3 +501,53 @@ svg{max-width:100%}
 .ev.is-active .ev-art--poster .ev-art__photo{animation:none}
 .map-credit{grid-column:1/-1;order:3;font-size:.72rem;color:#7d838b;margin-top:-20px}
 .map-credit a{text-decoration:underline}
+
+/* ===== v8: formulario de contacto, preguntas frecuentes y páginas legales ===== */
+.contact{background:var(--cream);padding:clamp(70px,8vw,120px) 0}
+.contact__grid{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(36px,6vw,90px);align-items:start}
+.contact__info p{color:#4a4f57;margin:22px 0 28px;max-width:480px}
+.contact__list{list-style:none;display:flex;flex-direction:column;gap:14px;margin-bottom:30px}
+.contact__list li{display:flex;gap:12px;align-items:flex-start;line-height:1.5}
+.contact__list svg{width:22px;height:22px;fill:var(--gold);flex:none;margin-top:2px}
+.contact__list a:hover{color:var(--gold)}
+.contact__book{border-color:var(--ink);color:var(--ink)}
+.contact__book:hover{color:#fff}
+.contact__form{background:#fff;border-radius:22px;padding:clamp(24px,3.5vw,40px);box-shadow:0 40px 70px -45px rgba(24,29,36,.45);display:flex;flex-direction:column;gap:14px}
+.contact__row{display:grid;gap:14px}
+.contact__row--2{grid-template-columns:1fr 1fr}
+.contact__row--3{grid-template-columns:1fr 1fr .7fr}
+.contact__form label{display:flex;flex-direction:column;gap:6px;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#6b7078;font-weight:500}
+.contact__form input,.contact__form select,.contact__form textarea{font:inherit;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--ink);background:#F7F5F2;border:1px solid transparent;border-radius:10px;padding:12px 14px;transition:border-color .25s,background .25s;width:100%}
+.contact__form input:focus,.contact__form select:focus,.contact__form textarea:focus{outline:none;border-color:var(--gold);background:#fff}
+.contact__form textarea{resize:vertical;min-height:90px}
+.contact__check{flex-direction:row!important;align-items:center;gap:10px!important;text-transform:none!important;letter-spacing:0!important;font-size:.9rem!important;color:#4a4f57!important}
+.contact__check input{width:18px!important;height:18px;accent-color:var(--gold);padding:0!important}
+.contact__check a{text-decoration:underline;color:var(--ink)}
+.contact__btns{display:flex;gap:12px;flex-wrap:wrap}
+.contact__btns .btn{margin-top:0;border-radius:10px;flex:1;min-width:200px}
+.btn--wa{background:#25D366;color:#fff;gap:10px}
+.btn--wa svg{fill:#fff}
+.btn--wa:hover{background:#1ebe5b}
+.hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}
+.contact__status{font-size:.92rem;min-height:1.4em;margin:0}
+.contact__status.is-ok{color:#2c7a4b}.contact__status.is-error{color:#b3412e}
+.faq{background:#fff;padding:clamp(70px,8vw,120px) 0}
+.faq__grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(30px,6vw,90px);align-items:start}
+.faq__intro p{color:#4a4f57;margin-top:20px;max-width:420px}
+.faq__list{border-top:1px solid rgba(24,29,36,.12)}
+.faq__item{border-bottom:1px solid rgba(24,29,36,.12)}
+.faq__item summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 4px;font-size:1.1rem;font-weight:500}
+.faq__item summary::-webkit-details-marker{display:none}
+.faq__item summary::after{content:"+";flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold);font-size:1.3rem;transition:transform .35s var(--ease),background .3s}
+.faq__item[open] summary::after{transform:rotate(45deg);background:var(--gold);color:#fff}
+.faq__item summary:hover{color:var(--gold)}
+.faq__answer{padding:0 4px 24px;color:#4a4f57;max-width:680px}
+.legal{background:#fff;padding:clamp(60px,7vw,100px) 0}
+.legal__body{max-width:860px}
+.legal__body h2{font-size:1.35rem;font-weight:500;margin:38px 0 12px;text-transform:uppercase;letter-spacing:.03em}
+.legal__body p{color:#3f444c;margin-bottom:12px}
+.legal__note{background:#FBF5EC;border:1px solid rgba(194,159,123,.5);border-radius:12px;padding:14px 18px;font-size:.95rem}
+.legal__date{margin-top:40px;font-size:.9rem;color:#7d838b}
+mark.ph{background:rgba(194,159,123,.25);color:#7a5a36;padding:1px 6px;border-radius:4px;font-weight:500}
+@media (max-width:900px){.contact__grid,.faq__grid{grid-template-columns:1fr}.contact__row--2,.contact__row--3{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.contact__row--2,.contact__row--3{grid-template-columns:1fr}}

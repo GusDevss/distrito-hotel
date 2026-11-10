@@ -301,6 +301,48 @@
     });
   }
 
+  /* ---------- Formulario de contacto: correo (send.php) o WhatsApp ---------- */
+  var form = $('#contactForm');
+  if (form) {
+    var status = $('#formStatus');
+    form.t.value = Date.now();
+    form.pagina.value = location.pathname;
+    var hoy = new Date(); hoy.setMinutes(hoy.getMinutes() - hoy.getTimezoneOffset());
+    form.llegada.min = form.salida.min = hoy.toISOString().slice(0, 10);
+    form.llegada.addEventListener('change', function () { form.salida.min = form.llegada.value; if (form.salida.value && form.salida.value <= form.llegada.value) form.salida.value = ''; });
+    var setStatus = function (msg, ok) { status.textContent = msg; status.className = 'contact__status ' + (ok ? 'is-ok' : 'is-error'); };
+    var validar = function () {
+      if (!form.nombre.value.trim()) { setStatus('Escribe tu nombre.', false); form.nombre.focus(); return false; }
+      if (!form.email.value.trim() && !form.telefono.value.trim()) { setStatus('Déjanos un correo o un teléfono para contactarte.', false); form.email.focus(); return false; }
+      if (form.email.value && !form.email.checkValidity()) { setStatus('El correo no es válido.', false); form.email.focus(); return false; }
+      if (!form.acepto.checked) { setStatus('Acepta el Aviso de privacidad para continuar.', false); return false; }
+      return true;
+    };
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!validar()) return;
+      var btn = form.querySelector('[type="submit"]'); btn.disabled = true; setStatus('Enviando…', true);
+      fetch(form.action, { method: 'POST', body: new FormData(form) })
+        .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+        .then(function (d) {
+          if (d.ok) { setStatus(d.mensaje || '¡Gracias! Te contactaremos muy pronto.', true); form.reset(); form.t.value = Date.now(); form.pagina.value = location.pathname; }
+          else setStatus((d.mensaje || 'No pudimos enviar tu solicitud.') + ' También puedes enviarla por WhatsApp.', false);
+        })
+        .catch(function () { setStatus('No pudimos enviar tu solicitud. Intenta por WhatsApp.', false); })
+        .then(function () { btn.disabled = false; });
+    });
+    $('#sendWa').addEventListener('click', function () {
+      if (!validar()) return;
+      var f = function (l, v) { return v ? '\n' + l + ': ' + v : ''; };
+      var txt = 'Hola, quiero información para hospedarme en Distrito Hotel.' +
+        f('Nombre', form.nombre.value.trim()) + f('Correo', form.email.value.trim()) + f('Teléfono', form.telefono.value.trim()) +
+        f('Llegada', form.llegada.value) + f('Salida', form.salida.value) + f('Huéspedes', form.huespedes.value) +
+        f('Habitación', form.habitacion.value) + f('Mensaje', form.mensaje.value.trim());
+      window.open('https://wa.me/524426737901?text=' + encodeURIComponent(txt), '_blank', 'noopener');
+      setStatus('Abrimos WhatsApp con tu mensaje listo para enviar.', true);
+    });
+  }
+
   /* ---------- Mapa interactivo ---------- */
   var mapEl = $('#map');
   if (!mapEl) return;

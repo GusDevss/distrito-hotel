@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "HotelRoom", "name": "Doble Std", "description": "Diseñada para viajeros de negocios que buscan confort y funcionalidad, nuestra habitación Business Class ofrece un espacio moderno y elegante de 23.20 m². Equipada con dos camas Twin XL para un descanso superior.", "floorSize": {"@type": "QuantitativeValue", "value": "23.20", "unitCode": "MTK"}, "bed": "2 camas Twin XL", "containedInPlace": {"@type": "Hotel", "name": "Distrito Hotel", "url": "https://distritohotelaeropuerto.com/"}}</script>
-  <link rel="stylesheet" href="../../assets/css/styles.css?v=20261110172536">
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=20261110173843">
 </head>
 <body class="page-habitaciones">
   <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -168,6 +168,50 @@
     <button class="lightbox__nav lightbox__nav--next" data-lb="next" aria-label="Siguiente">&rarr;</button>
   </div>
 
+  <section class="contact" id="contacto">
+    <div class="container contact__grid">
+      <div class="contact__info">
+        <span class="eyebrow reveal">Reservaciones y cotizaciones</span>
+        <h2 class="h2 reveal">¿Listo para tu <span class="gold">próxima escala</span>?</h2>
+        <p class="reveal">Déjanos tus datos y te enviamos disponibilidad y tarifa. Atendemos viajes de negocio, grupos y convenios empresariales.</p>
+        <ul class="contact__list reveal">
+          <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zm0 4.5A2.5 2.5 0 1 0 12 11.5 2.5 2.5 0 0 0 12 6.5z"/></svg><span>Carretera Estatal 200, Carr. Querétaro-Tequisquiapan 22500, 76270 Santiago de Querétaro, Qro.</span></li>
+          <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm1 5h-2v6l5 3 1-1.7-4-2.3V7z"/></svg><span><a href="tel:+524426737901">442 673 7901</a> · <a href="tel:+524426737902">442 673 7902</a></span></li>
+          <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm11 8H6v10h12V10z"/></svg><span><a href="mailto:reservaciones@distritohotelaeropuerto.com">reservaciones@distritohotelaeropuerto.com</a></span></li>
+        </ul>
+        <a class="btn btn--outline contact__book reveal" href="https://us2.cloudbeds.com/reservation/fpdAA3" target="_blank" rel="noopener">Reservar en línea</a>
+      </div>
+      <form class="contact__form reveal" id="contactForm" action="/send.php" method="post" novalidate>
+        <div class="contact__row">
+          <label>Nombre completo*<input name="nombre" required autocomplete="name" maxlength="120"></label>
+        </div>
+        <div class="contact__row contact__row--2">
+          <label>Correo electrónico<input name="email" type="email" autocomplete="email" maxlength="160"></label>
+          <label>Teléfono / WhatsApp<input name="telefono" type="tel" autocomplete="tel" maxlength="30"></label>
+        </div>
+        <div class="contact__row contact__row--3">
+          <label>Llegada<input name="llegada" type="date"></label>
+          <label>Salida<input name="salida" type="date"></label>
+          <label>Huéspedes<input name="huespedes" type="number" min="1" max="40" value="1"></label>
+        </div>
+        <div class="contact__row">
+          <label>Habitación<select name="habitacion"><option value="">Sin preferencia</option><option>King Std</option><option>Doble Std</option><option>Junior Suite</option><option>King Handicap</option><option>Grupo / convenio empresarial</option></select></label>
+        </div>
+        <div class="contact__row">
+          <label>Mensaje<textarea name="mensaje" rows="3" maxlength="2000" placeholder="Cuéntanos qué necesitas: traslado, factura, sala de juntas…"></textarea></label>
+        </div>
+        <input type="text" name="sitio_web" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="hidden" name="t"><input type="hidden" name="pagina">
+        <label class="contact__check"><input type="checkbox" name="acepto" value="si" required> He leído y acepto el <a href="/aviso-de-privacidad/" target="_blank">Aviso de privacidad</a>.</label>
+        <div class="contact__btns">
+          <button class="btn btn--gold" type="submit">Enviar por correo</button>
+          <button class="btn btn--wa" type="button" id="sendWa"><svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><path d="M16 3C9 3 3.3 8.6 3.3 15.6c0 2.5.7 4.8 1.9 6.8L3 29l6.8-2.1c1.9 1 4 1.6 6.2 1.6 7 0 12.7-5.6 12.7-12.6S23 3 16 3z"/></svg>Enviar por WhatsApp</button>
+        </div>
+        <p class="contact__status" id="formStatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
   <footer class="footer">
     <div class="container">
       <div class="footer__top">
@@ -203,7 +247,7 @@
       </div>
       <div class="footer__bottom">
         <span>© <span id="year">2026</span> DISTRITOHOTEL</span>
-        <nav aria-label="Legal"><a href="/aviso-de-privacidad">Aviso de privacidad</a><a href="/terminos-y-condiciones">Términos y condiciones</a></nav>
+        <nav aria-label="Legal"><a href="/aviso-de-privacidad/">Aviso de privacidad</a><a href="/terminos-y-condiciones/">Términos y condiciones</a></nav>
       </div>
     </div>
   </footer>
@@ -218,6 +262,6 @@
 
   <script src="../../assets/vendor/gsap/gsap.min.js" defer></script>
   <script src="../../assets/vendor/gsap/ScrollTrigger.min.js" defer></script>
-  <script src="../../assets/js/main.js?v=20261110172536" defer></script>
+  <script src="../../assets/js/main.js?v=20261110173843" defer></script>
 </body>
 </html>
