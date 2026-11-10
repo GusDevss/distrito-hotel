@@ -7,7 +7,13 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var hasGsap = typeof window.gsap !== 'undefined';
   if (!hasGsap) document.documentElement.classList.add('no-gsap');
-  else gsap.registerPlugin(ScrollTrigger);
+  else {
+    gsap.registerPlugin(ScrollTrigger);
+    window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) { ScrollTrigger.refresh(); gsap.set('.hero__title, .hero__title .char', { clearProps: 'all' }); }
+    });
+  }
 
   var yearEl = $('#year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
 
@@ -108,7 +114,6 @@
       if (hotel.complete && hotel.naturalWidth) showHotel();
       else { hotel.addEventListener('load', showHotel, { once: true }); hotel.addEventListener('error', showHotel, { once: true }); }
       gsap.from('.hero__scroll', { opacity: 0, y: 20, duration: .8, delay: 1.2 });
-      gsap.to('.hero__title', { yPercent: -50, opacity: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
     }
     if ($('.page-hero')) {
       gsap.from('.page-hero__title, .page-hero__sub, .crumbs', { y: 50, opacity: 0, duration: 1.1, stagger: .12, ease: 'power4.out' });
