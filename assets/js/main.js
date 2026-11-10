@@ -351,6 +351,38 @@
     });
   }
 
+  /* ---------- Buzón de sugerencias (ventana emergente) ---------- */
+  var sug = $('#sugModal'), sugForm = $('#sugForm'), sugBtn = $('#openSug');
+  if (sug && sugForm && sugBtn) {
+    var sugStatus = $('#sugStatus');
+    var sugSet = function (m, ok) { sugStatus.textContent = m; sugStatus.className = 'contact__status ' + (ok ? 'is-ok' : 'is-error'); };
+    var openSug = function () {
+      sugForm.t.value = Date.now(); sugForm.pagina.value = location.pathname; sugSet('', true);
+      sug.hidden = false; document.body.style.overflow = 'hidden'; sugForm.sugerencia.focus();
+    };
+    var closeSug = function () { sug.hidden = true; document.body.style.overflow = ''; sugBtn.focus(); };
+    sugBtn.addEventListener('click', openSug);
+    sug.addEventListener('click', function (e) { if (e.target.closest('[data-sclose]')) closeSug(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !sug.hidden) closeSug(); });
+    if (location.hash === '#sugerencias') openSug();
+    sugForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (sugForm.sugerencia.value.trim().length < 5) { sugSet('Escribe tu sugerencia.', false); sugForm.sugerencia.focus(); return; }
+      if (sugForm.email.value && !sugForm.email.checkValidity()) { sugSet('El correo no es válido.', false); return; }
+      var datos = sugForm.nombre.value.trim() || sugForm.email.value.trim() || sugForm.telefono.value.trim();
+      if (datos && !sugForm.acepto.checked) { sugSet('Para dejar tus datos acepta el Aviso de privacidad.', false); return; }
+      var btn = sugForm.querySelector('[type="submit"]'); btn.disabled = true; sugSet('Enviando…', true);
+      fetch(sugForm.action, { method: 'POST', body: new FormData(sugForm) })
+        .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+        .then(function (d) {
+          if (d.ok) { sugSet(d.mensaje || '¡Gracias por ayudarnos a mejorar!', true); sugForm.reset(); sugForm.t.value = Date.now(); setTimeout(closeSug, 2600); }
+          else sugSet(d.mensaje || 'No pudimos enviar tu mensaje. Intenta más tarde.', false);
+        })
+        .catch(function () { sugSet('No pudimos enviar tu mensaje. Intenta más tarde.', false); })
+        .then(function () { btn.disabled = false; });
+    });
+  }
+
   /* ---------- Mapa interactivo ---------- */
   var mapEl = $('#map');
   if (!mapEl) return;
