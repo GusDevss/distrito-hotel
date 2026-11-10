@@ -558,3 +558,23 @@ mark.ph{background:rgba(194,159,123,.25);color:#7a5a36;padding:1px 6px;border-ra
 .header__wa svg{fill:#25D366}
 .header__wa:hover{color:var(--gold)}
 @media (max-width:1199px){.header__phones{display:none}}
+
+/* ===== v10: formulario en modo oscuro, integrado con el footer ===== */
+.contact{background:var(--ink);color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
+.contact .h2{color:#fff}
+.contact__info p{color:#c9ccd1}
+.contact__list li{color:#e3e5e8}
+.contact__list a:hover{color:var(--gold)}
+.contact__list svg{fill:var(--gold)}
+.contact__book{border-color:rgba(255,255,255,.85);color:#fff}
+.contact__book:hover{background:var(--gold);border-color:var(--gold)}
+.contact__form{background:#20262e;border:1px solid rgba(194,159,123,.22);box-shadow:0 40px 80px -50px rgba(0,0,0,.9)}
+.contact__form label{color:#9aa0a8}
+.contact__form input,.contact__form select,.contact__form textarea{background:#2a313a;color:#fff;border-color:rgba(255,255,255,.06);color-scheme:dark}
+.contact__form input::placeholder,.contact__form textarea::placeholder{color:#7d838b}
+.contact__form input:focus,.contact__form select:focus,.contact__form textarea:focus{background:#2f3741;border-color:var(--gold)}
+.contact__form select option{background:#20262e;color:#fff}
+.contact__check{color:#c9ccd1!important}
+.contact__check a{color:#fff}
+.contact__status.is-ok{color:#6fd39a}.contact__status.is-error{color:#ff8a73}
+.contact + .footer{padding-top:clamp(60px,6vw,90px)}

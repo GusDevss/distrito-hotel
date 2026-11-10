@@ -301,6 +301,14 @@
     });
   }
 
+  /* ---------- Preguntas frecuentes: solo una abierta a la vez ---------- */
+  var faqs = $$('.faq__item');
+  faqs.forEach(function (d) {
+    d.addEventListener('toggle', function () {
+      if (d.open) faqs.forEach(function (o) { if (o !== d) o.open = false; });
+    });
+  });
+
   /* ---------- Formulario de contacto: correo (send.php) o WhatsApp ---------- */
   var form = $('#contactForm');
   if (form) {
