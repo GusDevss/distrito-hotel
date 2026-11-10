@@ -465,3 +465,24 @@ svg{max-width:100%}
 .venue:hover .venue__strip img{transform:none}
 .g-item.wide{grid-column:span 2}
 @media (max-width:560px){.g-item.wide{grid-column:span 2}.venue__strip{display:none}}
+
+/* ===== v5: menú móvil, portadas compactas en celular, logo dorado ===== */
+@media (max-width:1199px){
+  /* backdrop-filter convertía al header en contenedor del menú fijo y lo recortaba al hacer scroll */
+  .header.is-scrolled{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(24,29,36,.97)}
+  .nav{height:100vh;height:100dvh;overflow-y:auto;overscroll-behavior:contain;background:var(--ink)}
+  body.menu-open{overflow:hidden}
+  body.menu-open::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:90}
+}
+@media (max-width:760px){
+  .hero{min-height:0;padding-top:104px}
+  .hero__title{margin-bottom:6px}
+  .hero__stage{margin-top:8px;padding-top:0}
+  .hero__hotel{min-width:760px;max-height:none;min-height:0}
+  .hero__glow{bottom:0;height:45%}
+  .hero__scroll{display:none}
+  .page-hero{min-height:0;padding:118px 0 44px}
+  .page-hero__sub{font-size:1rem;margin-top:14px}
+  .crumbs{margin-bottom:12px}
+}
+.footer__top img{width:240px;height:auto}

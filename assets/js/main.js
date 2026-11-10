@@ -28,14 +28,18 @@
 
   /* ---------- Menú móvil ---------- */
   var burger = $('#burger'), nav = $('.nav');
-  burger.addEventListener('click', function () {
-    var open = burger.getAttribute('aria-expanded') !== 'true';
+  function setMenu(open) {
     burger.setAttribute('aria-expanded', open);
     nav.classList.toggle('is-open', open);
+    document.body.classList.toggle('menu-open', open);
+  }
+  burger.addEventListener('click', function () { setMenu(burger.getAttribute('aria-expanded') !== 'true'); });
+  nav.addEventListener('click', function (e) { if (e.target.tagName === 'A') setMenu(false); });
+  document.addEventListener('click', function (e) {
+    if (nav.classList.contains('is-open') && !e.target.closest('.nav') && !e.target.closest('#burger')) setMenu(false);
   });
-  nav.addEventListener('click', function (e) {
-    if (e.target.tagName === 'A') { burger.setAttribute('aria-expanded', 'false'); nav.classList.remove('is-open'); }
-  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('is-open')) setMenu(false); });
+  window.addEventListener('resize', function () { if (innerWidth >= 1200 && nav.classList.contains('is-open')) setMenu(false); });
 
   /* ---------- Cielo estrellado (canvas) ---------- */
   $$('[data-stars]').forEach(function (cv) {
@@ -271,12 +275,12 @@
   var mapEl = $('#map');
   if (!mapEl) return;
   // Coordenadas editables: [lat, lng]. radius = metros del área iluminada.
-  var HOTEL = { id: 'hotel', name: 'Distrito Hotel', dist: 'Tu punto de partida', ll: [20.6268, -100.1880], img: IMG + '2026/09/distrito-hotel-aeropuerto-noche.webp', radius: 160 };
+  var HOTEL = { id: 'hotel', name: 'Distrito Hotel', dist: 'Tu punto de partida', ll: [20.6268, -100.1880], img: 'assets/img/hotel/fachada-dia-sm.webp', radius: 160 };
   var PLACES = [
     HOTEL,
     { id: 'parking', name: 'Estacionamiento de larga estancia', dist: 'A pasos del hotel', ll: [20.6248, -100.1898], radius: 180, img: null },
-    { id: 'aiq', name: 'Aeropuerto Internacional de Querétaro', dist: 'Enfrente · 2 min', ll: [20.6190, -100.1860], radius: 900, img: IMG + '2026/10/aeropuerto-300x225.webp' },
-    { id: 'unaq', name: 'Universidad Aeronáutica (UNAQ)', dist: 'A lado del aeropuerto · 4 min', ll: [20.6285, -100.2075], radius: 350, img: IMG + '2026/10/universidad-aeronautica-300x200.webp' },
+    { id: 'aiq', name: 'Aeropuerto Internacional de Querétaro', dist: 'Enfrente · 2 min', ll: [20.6190, -100.1860], radius: 900, img: 'assets/img/brand/aeropuerto.webp' },
+    { id: 'unaq', name: 'Universidad Aeronáutica (UNAQ)', dist: 'A lado del aeropuerto · 4 min', ll: [20.6285, -100.2075], radius: 350, img: 'assets/img/brand/universidad-aeronautica.webp' },
     { id: 'aerotech', name: 'Parque Industrial Aerotech', dist: '2 km · 4 min', ll: [20.6360, -100.1760], radius: 600, img: null },
     { id: 'safran', name: 'Safran Aircraft Engines', dist: '1.5 km · 3 min', ll: [20.6215, -100.1735], radius: 300, img: null },
     { id: 'puerta', name: 'Parque Industrial Puerta Querétaro', dist: '5.5 km · 8 min', ll: [20.6325, -100.2395], radius: 550, img: null },
