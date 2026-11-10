@@ -277,17 +277,17 @@
   // Coordenadas editables: [lat, lng]. radius = metros del área iluminada.
   // Foto genérica de parque industrial: Omar David Sandoval Sida, CC BY-SA 3.0 (Wikimedia Commons)
   var PARK = 'assets/img/brand/parque-industrial.webp';
-  var HOTEL = { id: 'hotel', name: 'Distrito Hotel', dist: 'Tu punto de partida', ll: [20.6301, -100.1861], img: 'assets/img/hotel/fachada-dia-sm.webp', radius: 160 };
+  var HOTEL = { id: 'hotel', name: 'Distrito Hotel', dist: 'Tu punto de partida', ll: [20.62756, -100.18299], img: 'assets/img/hotel/fachada-dia-sm.webp', radius: 140 };
   var PLACES = [
     HOTEL,
-    { id: 'parking', name: 'Estacionamiento de larga estancia', dist: 'A pasos del hotel', ll: [20.6262, -100.1886], radius: 150, img: 'assets/img/brand/estacionamiento.webp' },
-    { id: 'aiq', name: 'Aeropuerto Internacional de Querétaro', dist: 'Enfrente · 2 min', ll: [20.6190, -100.1860], radius: 900, img: 'assets/img/brand/aeropuerto.webp' },
-    { id: 'unaq', name: 'Universidad Aeronáutica (UNAQ)', dist: 'A lado del aeropuerto · 4 min', ll: [20.6285, -100.2075], radius: 350, img: 'assets/img/brand/universidad-aeronautica.webp' },
-    { id: 'aerotech', name: 'Parque Industrial Aerotech', dist: '2 km · 4 min', ll: [20.6360, -100.1760], radius: 600, img: PARK },
-    { id: 'safran', name: 'Safran Aircraft Engines', dist: '1.5 km · 3 min', ll: [20.6215, -100.1735], radius: 300, img: PARK },
-    { id: 'puerta', name: 'Parque Industrial Puerta Querétaro', dist: '5.5 km · 8 min', ll: [20.6325, -100.2395], radius: 550, img: PARK },
-    { id: 'odonnell', name: "Parque Industrial O'Donnell Aeropuerto", dist: '6.5 km · 10 min', ll: [20.6185, -100.2470], radius: 650, img: PARK },
-    { id: 'vynmsa', name: 'Parque Industrial VYNMSA Querétaro', dist: '6 km · 10 min', ll: [20.5885, -100.2245], radius: 550, img: PARK }
+    { id: 'parking', name: 'Estacionamiento de larga estancia', dist: 'Frente al hotel · 2 min', ll: [20.62384, -100.19156], radius: 130, img: 'assets/img/brand/estacionamiento.webp' },
+    { id: 'aiq', name: 'Aeropuerto Internacional de Querétaro', dist: 'Enfrente · 2 min', ll: [20.61790, -100.18627], radius: 1300, img: 'assets/img/brand/aeropuerto.webp' },
+    { id: 'unaq', name: 'Universidad Aeronáutica (UNAQ)', dist: 'A 500 m del hotel', ll: [20.62606, -100.18752], radius: 230, img: 'assets/img/brand/universidad-aeronautica.webp' },
+    { id: 'aerotech', name: 'Parque Industrial Aerotech', dist: '1.6 km · 3 min', ll: [20.63121, -100.16918], radius: 450, img: PARK },
+    { id: 'safran', name: 'Safran Aircraft Engines', dist: '1.7 km · 4 min', ll: [20.61862, -100.16877], radius: 280, img: PARK },
+    { id: 'puerta', name: 'Parque Industrial Puerta Querétaro', dist: '4 km · 8 min', ll: [20.62560, -100.22196], radius: 450, img: PARK },
+    { id: 'odonnell', name: "Parque Industrial O'Donnell Aeropuerto", dist: '5 km · 10 min', ll: [20.61940, -100.23200], radius: 550, img: PARK },
+    { id: 'vynmsa', name: 'Parque Industrial VYNMSA Querétaro', dist: '4.5 km · 10 min', ll: [20.59076, -100.20021], radius: 450, img: PARK }
   ];
   var FACTORY = '<svg viewBox="0 0 24 24" width="30" height="30"><path d="M3 21V10l5 3V10l5 3V7l8 4v10H3zm4-3h2v-2H7v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2z"/></svg>';
 
@@ -343,6 +343,7 @@
     list.addEventListener('mouseover', function (e) { var li = e.target.closest('.place'); if (li) highlight(li.dataset.id, true); });
     list.addEventListener('focusin', function (e) { var li = e.target.closest('.place'); if (li) highlight(li.dataset.id, true); });
     list.addEventListener('click', function (e) { var li = e.target.closest('.place'); if (li) { current = null; highlight(li.dataset.id, true); } });
+    map.fitBounds(L.latLngBounds(PLACES.map(function (p) { return p.ll; })).pad(0.06));
     highlight('hotel', false);
     setTimeout(function () { map.invalidateSize(); }, 400);
   }

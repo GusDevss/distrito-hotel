@@ -1,6 +1,7 @@
 {
  "feria-ganadera": {
-  "propio": true
+  "propio": true,
+  "pos": "center"
  },
  "motor-show": {
   "autor": "Wilzz99",
@@ -51,12 +52,15 @@
   "archivo": "File:Earth Wind & Fire experience fr. Al McKay - Festival du Bout du Monde 2012 - 017.jpg"
  },
  "bisbal": {
-  "propio": true
+  "propio": true,
+  "pos": "center top"
  },
  "time-and-space": {
-  "propio": true
+  "propio": true,
+  "pos": "center top"
  },
  "cotorrisa": {
-  "propio": true
+  "propio": true,
+  "pos": "center 30%"
  }
 }
