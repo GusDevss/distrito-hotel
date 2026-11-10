@@ -2,9 +2,10 @@
 /**
  * Distrito Hotel — recepción del formulario de contacto.
  * Envía la solicitud por correo usando mail() de Hostinger y responde en JSON.
- * Cambia $DESTINO si las solicitudes deben llegar a otro correo.
+ * $DESTINO: correos que reciben la solicitud. $COPIA: correos en copia (Cc).
  */
-$DESTINO = 'reservaciones@distritohotelaeropuerto.com';
+$DESTINO = 'reservaciones@distritohotelaeropuerto.com, gerencia@distritohotelaeropuerto.com';
+$COPIA   = 'programacionmkt@mediamaster.mx, gerenciamkt@mediamaster.mx, traffickermkt@mediamaster.mx';
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -59,6 +60,7 @@ $host = preg_replace('/^www\./', '', preg_replace('/[^a-z0-9.-]/i', '', $_SERVER
 $asunto = '=?UTF-8?B?' . base64_encode('Solicitud web: ' . $nombre) . '?=';
 $cab  = "From: Distrito Hotel Web <no-reply@$host>\r\n";
 if ($email !== '') $cab .= "Reply-To: $email\r\n";
+$cab .= "Cc: $COPIA\r\n";
 $cab .= "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n";
 
 if (@mail($DESTINO, $asunto, $cuerpo, $cab)) {

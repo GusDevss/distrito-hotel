@@ -338,7 +338,7 @@
         f('Nombre', form.nombre.value.trim()) + f('Correo', form.email.value.trim()) + f('Teléfono', form.telefono.value.trim()) +
         f('Llegada', form.llegada.value) + f('Salida', form.salida.value) + f('Huéspedes', form.huespedes.value) +
         f('Habitación', form.habitacion.value) + f('Mensaje', form.mensaje.value.trim());
-      window.open('https://wa.me/524426737901?text=' + encodeURIComponent(txt), '_blank', 'noopener');
+      window.open('https://wa.me/524272039932?text=' + encodeURIComponent(txt), '_blank', 'noopener');
       setStatus('Abrimos WhatsApp con tu mensaje listo para enviar.', true);
     });
   }
