@@ -27,7 +27,7 @@ $t = (int) campo('t', 20);
 if ($t > 0 && (time() * 1000 - $t) < 3000) responder(false, 'Por favor intenta de nuevo.', 429);
 
 $tipos = ['Sugerencia', 'Felicitación', 'Queja', 'Otro'];
-$areas = ['Habitación', 'Recepción', 'Hangar Restaurante', 'Hangar Sport Bar', 'Gimnasio', 'Pantry', 'Sala de juntas', 'Transporte', 'Limpieza', 'Sitio web', 'Otra'];
+$areas = ['Habitación', 'Recepción', 'Hangar Restaurante', 'Hangar Sports Bar', 'Gimnasio', 'Pantry', 'Sala de juntas', 'Transporte', 'Limpieza', 'Sitio web', 'Otra'];
 $tipo   = in_array(campo('tipo', 30), $tipos, true) ? campo('tipo', 30) : 'Sugerencia';
 $area   = in_array(campo('area', 40), $areas, true) ? campo('area', 40) : 'Otra';
 $cal    = max(0, min(5, (int) campo('calificacion', 1)));
