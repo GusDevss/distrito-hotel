@@ -303,7 +303,8 @@
   function initMap() {
     if (typeof L === 'undefined') return;
     var map = L.map('map', { center: [20.6264, -100.1953], zoom: 14, scrollWheelZoom: false });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd', attribution: '&copy; OpenStreetMap &copy; CARTO' }).addTo(map);
+    // OpenStreetMap: sin API key. Se oscurece y entona en dorado con CSS (.map-wrap .leaflet-tile-pane)
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' }).addTo(map);
     var card = $('#mapCard'), areaLayer = L.layerGroup().addTo(map), current = null;
 
     PLACES.forEach(function (p) {
