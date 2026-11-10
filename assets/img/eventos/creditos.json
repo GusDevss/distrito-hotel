@@ -1,9 +1,6 @@
 {
  "feria-ganadera": {
-  "autor": "gerk00",
-  "licencia": "CC BY-SA 2.0",
-  "fuente": "https://commons.wikimedia.org/wiki/File:Jesse_%26_Joy_Palenque_Feria_Ganadera_de_Quer%C3%A9taro_2013.jpg",
-  "archivo": "File:Jesse & Joy Palenque Feria Ganadera de Querétaro 2013.jpg"
+  "propio": true
  },
  "motor-show": {
   "autor": "Wilzz99",
@@ -52,5 +49,14 @@
   "licencia": "CC BY-SA 3.0",
   "fuente": "https://commons.wikimedia.org/wiki/File:Earth_Wind_%26_Fire_experience_fr._Al_McKay_-_Festival_du_Bout_du_Monde_2012_-_017.jpg",
   "archivo": "File:Earth Wind & Fire experience fr. Al McKay - Festival du Bout du Monde 2012 - 017.jpg"
+ },
+ "bisbal": {
+  "propio": true
+ },
+ "time-and-space": {
+  "propio": true
+ },
+ "cotorrisa": {
+  "propio": true
  }
 }

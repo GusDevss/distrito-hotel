@@ -493,3 +493,11 @@ svg{max-width:100%}
 .ev-art--photo::after{display:none}
 .ev-credit{position:absolute!important;right:12px;bottom:10px;z-index:3!important;font-size:.68rem;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);padding:3px 8px;border-radius:6px;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ev-credit:hover{color:#fff}
+
+/* ===== v7: pósters de eventos y crédito del mapa ===== */
+.ev-art--poster{background:#0d1014}
+.ev-art--poster::before,.ev-art--poster::after{display:none}
+.ev-art--poster .ev-art__photo{filter:none;object-fit:cover}
+.ev.is-active .ev-art--poster .ev-art__photo{animation:none}
+.map-credit{grid-column:1/-1;order:3;font-size:.72rem;color:#7d838b;margin-top:-20px}
+.map-credit a{text-decoration:underline}
