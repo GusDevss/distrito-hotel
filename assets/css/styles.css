@@ -618,3 +618,9 @@ main:has(> .cta-band:last-child) + .contact{padding-top:clamp(40px,5vw,70px)}
 .sbox__send{margin-top:4px;border-radius:10px}
 @media (max-width:560px){.footer__bottom{flex-direction:column;align-items:flex-start}#sugForm .contact__row--2{grid-template-columns:1fr}}
 .sbox__label{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#9aa0a8;font-weight:500;margin:0 0 -8px}
+
+/* ===== v13: buzón bajo redes y sin scroll horizontal ===== */
+.footer__fb{margin-top:34px}
+.footer__fb-txt{font-size:.95rem;color:#c9ccd1;margin-bottom:10px}
+.sbox__card{overflow-x:hidden}
+.hp{position:fixed!important;left:0!important;top:0!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)}
