@@ -254,6 +254,24 @@
     return function open(k) { show(k); lb.hidden = false; document.body.style.overflow = 'hidden'; };
   }
 
+  /* ---------- Menús de Hangar: pestañas y vista ampliada ---------- */
+  var menuTabs = $$('.menu-tab');
+  if (menuTabs.length) {
+    var showMenu = function (k) {
+      menuTabs.forEach(function (t) { var on = t.dataset.menu === k; t.classList.toggle('is-active', on); t.setAttribute('aria-selected', on); });
+      $$('.menu-panel').forEach(function (p) { var on = p.dataset.panel === k; p.classList.toggle('is-active', on); p.hidden = !on; });
+    };
+    menuTabs.forEach(function (t) { t.addEventListener('click', function () { showMenu(t.dataset.menu); }); });
+    var hashMenu = (location.hash || '').replace('#menu-', '');
+    if (hashMenu && $('[data-panel="' + hashMenu + '"]')) showMenu(hashMenu);
+    var openMenu = lightbox(function () {
+      return $$('.menu-panel.is-active .menu-page img').map(function (im) { return { src: im.dataset.full, alt: im.alt }; });
+    });
+    $$('.menu-page').forEach(function (b) {
+      b.addEventListener('click', function () { openMenu($$('.menu-page', b.closest('.menu-panel')).indexOf(b)); });
+    });
+  }
+
   /* ---------- Galería: filtros + lightbox ---------- */
   var grid = $('#gGrid');
   if (grid) {
